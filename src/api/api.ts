@@ -137,6 +137,40 @@ export interface ValidationError {
 export const AuthApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
         /**
+         * Returns the authenticated user\'s profile information.
+         * @summary Get current user info
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMeMeGet: async (options: RawAxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/me`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication OAuth2PasswordBearer required
+            // oauth required
+            await setOAuthToObject(localVarHeaderParameter, "OAuth2PasswordBearer", [], configuration)
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Authenticate with username or email and password. Returns a Bearer JWT. In DEV mode tokens have no expiration; in production they expire after the configured TTL.
          * @summary Login and receive a JWT
          * @param {LoginRequest} loginRequest 
@@ -286,6 +320,18 @@ export const AuthApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = AuthApiAxiosParamCreator(configuration)
     return {
         /**
+         * Returns the authenticated user\'s profile information.
+         * @summary Get current user info
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getMeMeGet(options?: RawAxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<UserPublic>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getMeMeGet(options);
+            const localVarOperationServerIndex = configuration?.serverIndex ?? 0;
+            const localVarOperationServerBasePath = operationServerMap['AuthApi.getMeMeGet']?.[localVarOperationServerIndex]?.url;
+            return (axios, basePath) => createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration)(axios, localVarOperationServerBasePath || basePath);
+        },
+        /**
          * Authenticate with username or email and password. Returns a Bearer JWT. In DEV mode tokens have no expiration; in production they expire after the configured TTL.
          * @summary Login and receive a JWT
          * @param {LoginRequest} loginRequest 
@@ -339,6 +385,15 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
     const localVarFp = AuthApiFp(configuration)
     return {
         /**
+         * Returns the authenticated user\'s profile information.
+         * @summary Get current user info
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getMeMeGet(options?: RawAxiosRequestConfig): AxiosPromise<UserPublic> {
+            return localVarFp.getMeMeGet(options).then((request) => request(axios, basePath));
+        },
+        /**
          * Authenticate with username or email and password. Returns a Bearer JWT. In DEV mode tokens have no expiration; in production they expire after the configured TTL.
          * @summary Login and receive a JWT
          * @param {LoginRequest} loginRequest 
@@ -380,6 +435,16 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
  * AuthApi - object-oriented interface
  */
 export class AuthApi extends BaseAPI {
+    /**
+     * Returns the authenticated user\'s profile information.
+     * @summary Get current user info
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    public getMeMeGet(options?: RawAxiosRequestConfig) {
+        return AuthApiFp(this.configuration).getMeMeGet(options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * Authenticate with username or email and password. Returns a Bearer JWT. In DEV mode tokens have no expiration; in production they expire after the configured TTL.
      * @summary Login and receive a JWT

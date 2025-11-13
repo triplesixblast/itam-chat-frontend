@@ -4,9 +4,54 @@ All URIs are relative to *http://localhost*
 
 |Method | HTTP request | Description|
 |------------- | ------------- | -------------|
+|[**getMeMeGet**](#getmemeget) | **GET** /me | Get current user info|
 |[**loginLoginPost**](#loginloginpost) | **POST** /login | Login and receive a JWT|
 |[**loginTokenTokenPost**](#logintokentokenpost) | **POST** /token | OAuth2 Password Grant (Swagger Authorize)|
 |[**registerRegisterPost**](#registerregisterpost) | **POST** /register | Register a new user|
+
+# **getMeMeGet**
+> UserPublic getMeMeGet()
+
+Returns the authenticated user\'s profile information.
+
+### Example
+
+```typescript
+import {
+    AuthApi,
+    Configuration
+} from './api';
+
+const configuration = new Configuration();
+const apiInstance = new AuthApi(configuration);
+
+const { status, data } = await apiInstance.getMeMeGet();
+```
+
+### Parameters
+This endpoint does not have any parameters.
+
+
+### Return type
+
+**UserPublic**
+
+### Authorization
+
+[OAuth2PasswordBearer](../README.md#OAuth2PasswordBearer)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+
+### HTTP response details
+| Status code | Description | Response headers |
+|-------------|-------------|------------------|
+|**200** | Successful Response |  -  |
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to Model list]](../README.md#documentation-for-models) [[Back to README]](../README.md)
 
 # **loginLoginPost**
 > Token loginLoginPost(loginRequest)

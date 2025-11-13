@@ -110,6 +110,25 @@
         }
       }
     },
+    "/me": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get current user info",
+        "description": "Returns the authenticated user's profile information.",
+        "operationId": "get_me_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserPublic" }
+              }
+            }
+          }
+        },
+        "security": [{ "OAuth2PasswordBearer": [] }]
+      }
+    },
     "/search": {
       "get": {
         "tags": ["Search"],
