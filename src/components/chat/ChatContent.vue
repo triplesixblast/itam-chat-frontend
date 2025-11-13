@@ -10,7 +10,6 @@
             v-for="message in messages"
             :key="message.id"
             v-bind="message"
-            :my-id="myId"
           />
         </div>
         <ChatInput v-model="inputMessage" class="input" @send="handleSend" />
@@ -27,9 +26,8 @@ import useChats from "../../composables/api/useChats";
 import type { ChatDetail, MessageOut } from "../../api";
 import Message from "./Message.vue";
 import ChatInput from "./ChatInput.vue";
-import useWS from "../../composables/useWS";
 
-const { chatId } = defineProps<{ chatId: string; myId: string }>();
+const { chatId } = defineProps<{ chatId: string }>();
 
 const { handleGetChatDetails, handleSendMessage, socket } = useChats();
 

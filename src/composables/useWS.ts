@@ -21,6 +21,10 @@ export default function useWS() {
       token
     ) {
       handleOpenSocket();
+
+      socket.value.onclose = () => {
+        handleOpenSocket();
+      };
     }
   });
 

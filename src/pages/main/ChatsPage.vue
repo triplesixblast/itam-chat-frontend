@@ -4,7 +4,7 @@
     :selected-chat="selectedChat"
     @select-chat="selectedChat = $event"
   />
-  <ChatContent :chatId="selectedChat" :my-id="me?.id" />
+  <ChatContent :chatId="selectedChat" />
 </template>
 
 <script setup lang="ts">
@@ -26,15 +26,8 @@ const handleEscape = (event: KeyboardEvent) => {
   }
 };
 
-const getMe = () => {
-  handleGetMe().then((res) => {
-    me.value = res;
-  });
-};
-
 onMounted(() => {
   document.addEventListener("keydown", handleEscape);
-  getMe();
 });
 
 onUnmounted(() => {

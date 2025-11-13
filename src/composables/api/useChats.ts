@@ -3,11 +3,11 @@ import type ApiInstances from "../../types/apiInstances";
 import type { ChatCreate } from "../../api";
 
 export default function useChats() {
-  const chats = (inject("apiInstances") as ApiInstances).chatsApi;
+  const chats = (inject("apiInstances") as Ref<ApiInstances>)?.value.chatsApi;
   const socket = inject("WS") as Ref<WebSocket>;
 
   const handleGetChats = async (limit: number = 20, offset: number = 0) => {
-    return await chats.listChatsChatsGet(limit, offset).then((res) => {
+    return await chats?.listChatsChatsGet(limit, offset).then((res) => {
       if (res.status == 200) {
         return res.data;
       }
@@ -15,7 +15,7 @@ export default function useChats() {
   };
 
   const handleCreateChat = async (data: ChatCreate) => {
-    return await chats.createChatChatsPost(data).then((res) => {
+    return await chats?.createChatChatsPost(data).then((res) => {
       if (res.status == 200) {
         return res.data;
       }
@@ -28,7 +28,7 @@ export default function useChats() {
     offset: number = 0
   ) => {
     return await chats
-      .getChatChatsChatIdGet(chatId, limit, offset)
+      ?.getChatChatsChatIdGet(chatId, limit, offset)
       .then((res) => {
         if (res.status == 200) {
           return res.data;

@@ -5,9 +5,12 @@ import type {
 } from "axios";
 import { AuthApi, ChatsApi, Configuration, SearchApi } from "../api";
 import type { BaseAPI } from "../api/base";
-import { provide } from "vue";
+import { provide, ref } from "vue";
 import { COOKIES, getCookie } from "./useCookies";
 import useErrors from "./useErrors";
+import type ApiInstances from "../types/apiInstances";
+
+const apiInstances = ref<ApiInstances>();
 
 export default function useApi() {
   // Call useErrors inside the function, not at module level
@@ -18,13 +21,13 @@ export default function useApi() {
     basePath: import.meta.env.VITE_APP_API_BASE_URL,
   });
 
-  const apiInstances = {
+  apiInstances.value = {
     authApi: new AuthApi(config),
     chatsApi: new ChatsApi(config),
     searchApi: new SearchApi(config),
   };
 
-  Object.values(apiInstances).forEach((apiInstance: BaseAPI) => {
+  Object.values(apiInstances.value).forEach((apiInstance: BaseAPI) => {
     apiInstance.axios.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
         config.headers["Authorization"] =
@@ -42,6 +45,5 @@ export default function useApi() {
       }
     );
   });
-
   provide("apiInstances", apiInstances);
 }
