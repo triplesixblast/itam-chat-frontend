@@ -1,7 +1,7 @@
 import { onBeforeMount, provide, ref, watch } from "vue";
 import { useJwtToken } from "./useCookies";
 
-let socket = ref<WebSocket>(new WebSocket(""));
+let socket = ref<WebSocket>(null);
 
 export default function useWS() {
   const jwtToken = useJwtToken();
@@ -17,13 +17,15 @@ export default function useWS() {
 
   watch(jwtToken, (token) => {
     if (
-      (!socket.value || socket.value.readyState === WebSocket.CLOSED) &&
+      (!socket.value || socket.value?.readyState === WebSocket.CLOSED) &&
       token
     ) {
       handleOpenSocket();
 
-      socket.value.onclose = () => {
+      if (socket.value){
+        socket.value.onclose = () => {
         handleOpenSocket();
+      }    
       };
     }
   });
@@ -32,11 +34,15 @@ export default function useWS() {
     if (jwtToken.value) {
       handleOpenSocket();
 
-      socket.value.onclose = () => {
+      if (socket.value){
+        socket.value.onclose = () => {
         handleOpenSocket();
+      }
+      
       };
     }
   });
 
   provide("WS", socket);
 }
+
